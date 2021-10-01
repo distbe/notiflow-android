@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "701917023498",
+    "project_id": "notiflow-24b2e",
+    "storage_bucket": "notiflow-24b2e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:701917023498:android:f053cb9e358cd511637ef3",
+        "android_client_info": {
+          "package_name": "be.dist.notiflow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "701917023498-1g4omc2dm63cdl3bgh5g2jcjc9fhhjpj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJ2lMxUQmlSWx7w-8sQl3roDNbD3ZFHJg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "701917023498-1g4omc2dm63cdl3bgh5g2jcjc9fhhjpj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
