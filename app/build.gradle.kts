@@ -14,8 +14,8 @@ android {
         applicationId = "be.dist.notiflow"
         minSdk = 28
         targetSdk = 30
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.0.1"
     }
     buildFeatures {
         viewBinding = true
@@ -29,12 +29,6 @@ android {
             isMinifyEnabled = false
         }
     }
-//    buildTypes {
-//        release {
-//            minifyEnabled false
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//        }
-//    }
 }
 
 dependencies {

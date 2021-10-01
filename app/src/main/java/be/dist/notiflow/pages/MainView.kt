@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -39,10 +40,7 @@ import androidx.core.content.ContextCompat.startActivity
 import be.dist.notiflow.NotiflowPreference
 import be.dist.notiflow.R
 import be.dist.notiflow.components.InputText
-import be.dist.notiflow.theme.Grey200
-import be.dist.notiflow.theme.Grey400
-import be.dist.notiflow.theme.Grey600
-import be.dist.notiflow.theme.Grey900
+import be.dist.notiflow.theme.*
 
 
 @Composable
@@ -51,6 +49,7 @@ fun MainView() {
     val focusManager = LocalFocusManager.current
     val debugState = remember { mutableStateOf(NotiflowPreference.debug) }
     val botState = remember { mutableStateOf(NotiflowPreference.bot) }
+    val validUrl = remember { mutableStateOf<Boolean?>(null) }
 
     Column(
         modifier = Modifier
@@ -107,9 +106,16 @@ fun MainView() {
                 modifier = Modifier
                     .fillMaxHeight()
                     .aspectRatio(1.2f)
+                    .clip(RoundedCornerShape(6.dp))
                     .clickable {
                         debugState.value = !debugState.value
                         NotiflowPreference.debug = debugState.value
+
+                        if (!debugState.value) {
+                            Toast
+                                .makeText(context, "더 이상 디버그 링크에 표시되지 않습니다.", Toast.LENGTH_SHORT)
+                                .show()
+                        }
                     }
                     .alpha(if (debugState.value) 1f else 0.2f)
             ) {
@@ -186,9 +192,16 @@ fun MainView() {
                 modifier = Modifier
                     .fillMaxHeight()
                     .aspectRatio(1.2f)
+                    .clip(RoundedCornerShape(6.dp))
                     .clickable {
                         botState.value = !botState.value
                         NotiflowPreference.bot = botState.value
+
+                        if (!botState.value) {
+                            Toast
+                                .makeText(context, "더 이상 봇이 동작하지 않습니다.", Toast.LENGTH_SHORT)
+                                .show()
+                        }
                     }
                     .alpha(if (botState.value) 1f else 0.2f)
             ) {
@@ -216,8 +229,25 @@ fun MainView() {
                 placeHolder = "봇 서버 URL을 입력해주세요.",
                 onValueChange = {
                     NotiflowPreference.serverUrl = it
+                    if (it.isEmpty()) {
+                        validUrl.value = null
+                    } else {
+                        validUrl.value = Patterns.WEB_URL.matcher(it).matches()
+                    }
                 },
                 modifier = Modifier
+            )
+        }
+
+        if (false == validUrl.value) {
+            Text(
+                text = "url 형식이 잘못되었습니다.",
+                fontWeight = FontWeight.Bold,
+                color = Color.Red600,
+                fontSize = 12.sp,
+                modifier = Modifier
+                    .padding(horizontal = 32.dp)
+                    .padding(top = 6.dp)
             )
         }
 

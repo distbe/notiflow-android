@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
+import android.util.Patterns
 import be.dist.notiflow.NotiflowPreference
 import be.dist.notiflow.api.*
 import kotlinx.coroutines.CoroutineScope
@@ -34,12 +35,12 @@ class NotificationService : NotificationListenerService() {
 
         val notiPackageName = sbn.packageName
         val notiTitle = extras.getString(Notification.EXTRA_TITLE)
-        val notiText = extras.getCharSequence(Notification.EXTRA_TEXT)
+        val notiMessage = extras.getCharSequence(Notification.EXTRA_TEXT)
         val notiSubText = extras.getCharSequence(Notification.EXTRA_SUB_TEXT)
 
         if (notiPackageName != "com.kakao.talk")
             return
-        if (null == notiText)
+        if (null == notiMessage)
             return
 
         Log.wtf("🚨", "id: ${id}")
@@ -47,7 +48,7 @@ class NotificationService : NotificationListenerService() {
 
         Log.wtf("🚨", "noti_PackageName: ${notiPackageName}")
         Log.wtf("🚨", "notiTitle: ${notiTitle}")
-        Log.wtf("🚨", "notiText: ${notiText}")
+        Log.wtf("🚨", "notiText: ${notiMessage}")
         Log.wtf("🚨", "notiSubText: ${notiSubText}")
 
         scope.launch {
@@ -59,8 +60,8 @@ class NotificationService : NotificationListenerService() {
                 val reqBody = RequestBody(
                     `package` = notiPackageName,
                     name = notiTitle ?: "",
-                    message = notiText.toString(),
-                    title = notiSubText.toString()
+                    message = notiMessage.toString(),
+                    title = notiSubText?.toString()
                 )
                 val reply = debugApi.sendDebug(NotiflowPreference.channel, reqBody).reply ?: return@launch
                 val replyAction = notification.actions.first {
@@ -78,12 +79,15 @@ class NotificationService : NotificationListenerService() {
             if (!NotiflowPreference.bot) {
                 return@launch
             }
-            if (NotiflowPreference.serverUrl.isEmpty()) {
+            val url = NotiflowPreference.serverUrl
+            if (url.isEmpty()) {
                 return@launch
             }
-            val url = NotiflowPreference.serverUrl
-            val uri = Uri.parse(url)
+            if (!Patterns.WEB_URL.matcher(url).matches()) {
+                return@launch
+            }
 
+            val uri = Uri.parse(url)
             botBaseUrl = "${uri.scheme}://${uri.host}"
             val path = url.split(botBaseUrl)[1]
 
@@ -91,7 +95,7 @@ class NotificationService : NotificationListenerService() {
                 val reqBody = RequestBody(
                     `package` = notiPackageName,
                     name = notiTitle ?: "",
-                    message = notiText.toString(),
+                    message = notiMessage.toString(),
                     title = notiSubText.toString()
                 )
 

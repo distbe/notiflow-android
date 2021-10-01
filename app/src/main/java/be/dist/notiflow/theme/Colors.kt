@@ -18,4 +18,5 @@ val Color.Companion.Indigo400 get() = Color(0xFF5C6BC0)
 val Color.Companion.Indigo600 get() = Color(0xFF3949AB)
 val Color.Companion.Indigo800 get() = Color(0xFF283593)
 
+val Color.Companion.Red600 get() = Color(0xFFE53935)
 val Color.Companion.Red800 get() = Color(0xFFC62828)

@@ -40,11 +40,13 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun initChannel() {
-        val raw = "${Date().time}"
-        val md = MessageDigest.getInstance("SHA-256")
-        md.update(raw.toByteArray())
-        val hex = String.format("%064x", BigInteger(1, md.digest()))
-        NotiflowPreference.channel = hex.slice(IntRange(0, 6))
+        if (NotiflowPreference.channel.isEmpty()) {
+            val raw = "${Date().time}"
+            val md = MessageDigest.getInstance("SHA-256")
+            md.update(raw.toByteArray())
+            val hex = String.format("%064x", BigInteger(1, md.digest()))
+            NotiflowPreference.channel = hex.slice(IntRange(0, 6))
+        }
     }
 
     private fun permissionGranted(): Boolean {
