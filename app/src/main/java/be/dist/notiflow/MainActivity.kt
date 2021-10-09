@@ -1,6 +1,5 @@
 package be.dist.notiflow
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
@@ -9,6 +8,8 @@ import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.app.NotificationManagerCompat
+import be.dist.notiflow.components.DialogCompose
+import be.dist.notiflow.components.DialogState
 import be.dist.notiflow.pages.MainView
 import be.dist.notiflow.theme.setThemeContent
 import com.google.accompanist.insets.statusBarsPadding
@@ -29,13 +30,17 @@ class MainActivity : ComponentActivity() {
                     .background(Color.White)
             ) {
                 MainView()
+                DialogCompose()
             }
         }
 
         initChannel()
+    }
 
+    override fun onResume() {
+        super.onResume()
         if (!permissionGranted()) {
-            startActivity(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
+            DialogState._showUpdateDialog.value = true
         }
     }
 
